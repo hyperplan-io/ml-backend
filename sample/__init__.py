@@ -1,1 +1,5 @@
-from .core import hmm
+"""
+    init file
+"""
+
+from .project import Project
