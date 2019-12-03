@@ -6,9 +6,10 @@ from typing import Callable, List
 import json
 import random
 import numpy as np
+from feature_type import FeatureType
 
 PREDICTION_FUNCTION = Callable[[np.ndarray], np.ndarray]
-PREPROCESSING_FUNCTION = Callable[[np.ndarray, np.ndarray], np.ndarray]
+PREPROCESSING_FUNCTION = Callable[[np.ndarray, FeatureType], np.ndarray]
 POSTPROCESSING_FUNCTION = Callable[[np.ndarray, np.ndarray, np.ndarray], np.ndarray]
 SELECTION_FUNCTION = Callable[[List[PREDICTION_FUNCTION]], PREDICTION_FUNCTION]
 
@@ -20,12 +21,14 @@ class Project():
             self,
             project_id: str,
             prediction_functions: List[PREDICTION_FUNCTION],
+            supported_feature_types: List[FeatureType],
             selection_function: SELECTION_FUNCTION = None,
-            preprocessing: PREPROCESSING_FUNCTION = lambda x: x,
+            preprocessing: PREPROCESSING_FUNCTION = lambda x,f: x,
             postprocessing: POSTPROCESSING_FUNCTION = lambda y: y,
         ):
         self.project_id = project_id
         self.prediction_functions = prediction_functions
+        self.supported_feature_types = supported_feature_types
 
         if selection_function is None:
             selection_function = lambda x: random.choice(prediction_functions)
@@ -35,7 +38,11 @@ class Project():
         self.pre_hooks = []
         self.post_hooks = []
 
-    def predict(self, features: np.ndarray, metadata: List) -> np.ndarray:
+
+    def supports_type(self, feature_type):
+        return feature_type in self.supported_feature_types
+
+    def predict(self, features, feature_type: FeatureType, metadata: List) -> np.ndarray:
         """
             The prediction function will execute an algorithm on the data that is provided.
             It will execute the hooks that have been registered.
@@ -44,13 +51,18 @@ class Project():
             features -- An array of data that will be preprocessed by the preprocessing function.
             metadata -- A list of tuples (key and value) to associate to this prediction.
         """
+        preprocessed_features = self.preprocessing(features, feature_type)
+
+        if preprocessed_features == None:
+            return None
+
         featuresWithData = zip(features, metadata)
         for hook in self.pre_hooks:
             hook(features, metadata)
 
         labels = self.postprocessing(
             self.selection_function(self.prediction_functions)(
-                self.preprocessing(features)
+               preprocessed_features 
             )
         )
 

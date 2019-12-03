@@ -22,7 +22,6 @@ def insert_prediction(conn, features, metadata, labels):
         INSERT INTO predictions(id, features, labels) VALUES(?,?,?)
         ''', (prediction_id, serializedX, serializedY)
     )
-    print(metadata)
     conn.executemany(
         '''
         INSERT INTO entities(prediction_id, key, value) VALUES(?,?,?)
