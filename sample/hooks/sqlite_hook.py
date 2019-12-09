@@ -4,9 +4,9 @@ from io import BytesIO
 import json
 from functools import partial
 import numpy as np
-from typing import Callable
+from typing import Callable, Dict
 
-def insert_prediction(conn, features, metadata, labels):
+def insert_prediction(conn, features, labels, metadata):
     serializedFeatures = BytesIO()
     np.save(serializedFeatures, features)
     serializedFeatures.seek(0)
@@ -25,11 +25,11 @@ def insert_prediction(conn, features, metadata, labels):
     conn.executemany(
         '''
         INSERT INTO entities(prediction_id, key, value) VALUES(?,?,?)
-        ''', list(map(lambda kv: (prediction_id, kv[0], kv[1]), metadata))
+        ''', list(map(lambda kv: (prediction_id, kv[0], kv[1]),  [[key, value] for key,value in metadata.items()]))
     )
     conn.commit()
 
-def sqlite_hook(filename) -> Callable[[np.ndarray], None]:
+def sqlite_hook(filename) -> Callable[[np.ndarray, np.ndarray, Dict], None]:
     conn = sqlite3.connect(filename)
     conn.execute('''
         CREATE TABLE IF NOT EXISTS predictions(
