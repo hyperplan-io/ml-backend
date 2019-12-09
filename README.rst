@@ -1,10 +1,7 @@
-Sample Module Repository
-========================
+# Hyperplan ML Backend
 
-This simple project is an example repo for Python projects.
+The goal of Hyperplan is to help you manage and serve your machine learning projects. Why should you use it ?
 
-`Learn more <http://www.kennethreitz.org/essays/repository-structure-and-python>`_.
-
----------------
-
-If you want to learn more about ``setup.py`` files, check out `this repository <https://github.com/kennethreitz/setup.py>`_.
+  * You want to enhance your productivity: Write reusable code accross projects.
+  * You want to easily extend your application: Hook functions let you register side effects to execute on the data that flows through your algorithms.
+  * You want your application to be testable: Hyperplan is primarily made out of simple testable functions.
