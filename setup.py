@@ -12,13 +12,13 @@ with open('LICENSE') as f:
     license = f.read()
 
 setup(
-    name='sample',
+    name='mlbackend',
     version='0.1.0',
-    description='Sample package for Python-Guide.org',
+    description='Machine Learning Backend Framework',
     long_description=readme,
-    author='Kenneth Reitz',
-    author_email='me@kennethreitz.com',
-    url='https://github.com/kennethreitz/samplemod',
+    author='Antoine Sauray',
+    author_email='sauray.antoine@outlook.com',
+    url='https://github.com/hyperplan-io/ml-backend',
     license=license,
     packages=find_packages(exclude=('tests', 'docs'))
 )
