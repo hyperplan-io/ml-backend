@@ -4,7 +4,7 @@ import unittest
 from unittest.mock import Mock
 from sklearn.ensemble import RandomForestClassifier
 
-from sample.project import Project
+from mlbackend.project import Project
 
 def clf1(features):
     return [(10, 0.1), (20, 0.2)]

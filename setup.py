@@ -10,7 +10,7 @@ with open('README.rst') as f:
 
 setup(
     name='mlbackend',
-    version='0.1.0',
+    version='0.1.0-test',
     description='machine learning backend framework',
     long_description=readme,
     long_description_content_type='text/x-rst',

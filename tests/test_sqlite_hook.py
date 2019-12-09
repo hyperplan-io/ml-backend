@@ -9,7 +9,7 @@ import string
 import sqlite3
 import numpy as np
 
-from sample.hooks.sqlite_hook import sqlite_hook, read_predictions
+from mlbackend.hooks.sqlite_hook import sqlite_hook, read_predictions
 
 N = 15
 
