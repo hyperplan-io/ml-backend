@@ -5,11 +5,10 @@
     Main function
 """
 
-import numpy as np
-
 from project import Project
-from hooks.sqlite_hook import sqlite_hook
 from mlrestapp import MlRestApp
+
+from .hooks.sqlite_hook import sqlite_hook
 
 def preprocess(features, feature_type):
     """
@@ -28,7 +27,7 @@ if __name__ == "__main__":
     PROJECT_A = Project(
         "id",
         prediction_functions=[
-            lambda features: [ [x*2 for x in X] for X in features]
+            lambda features: [[x*2 for x in X] for X in features]
         ]
     )
 

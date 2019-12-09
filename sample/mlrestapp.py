@@ -28,6 +28,18 @@ class PredictionHandler():
         self.project = project
         self.supported_formats = supported_formats
 
+    def get_project(self):
+        """
+            Returns the project served on this handler
+        """
+        return self.project
+
+    def get_supported_formats(self):
+        """
+            Returns the formats supported by this handler
+        """
+        return self.project
+
     def on_post(self, req, resp):
         """
             Handles http POST requests
@@ -59,6 +71,7 @@ class PredictionHandler():
                         """.format(content_type, self.project.project_id)
             }
 
+#pylint: disable=W0223
 class StandaloneApplication(gunicorn.app.base.BaseApplication):
     """
         A Gunicorn standalone application
@@ -95,11 +108,17 @@ class MlRestApp():
             The projects you want to serve
 
             Keyword arguments:
-            projects -- 
+            projects --
             the tuples of projects you want to serve:
             (project, route, formats supported)
         """
         self.projects = projects
+
+    def get_projects(self):
+        """
+            Returns the projects of the rest api
+        """
+        return self.projects
 
     def start(self):
         """

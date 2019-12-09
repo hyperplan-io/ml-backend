@@ -20,8 +20,6 @@ class Project():
             project_id: str,
             prediction_functions: List[PredictionFunction],
             selection_function: SelectionFunction = None,
-            preprocessing: PreProcessingFunction = lambda x, f: x,
-            postprocessing: PostProcessingFunction = lambda y: y,
         ):
         self.project_id = project_id
         self.prediction_functions = prediction_functions
@@ -29,10 +27,30 @@ class Project():
         if selection_function is None:
             selection_function = lambda x, f: random.choice(prediction_functions)
         self.selection_function = selection_function
-        self.preprocessing = preprocessing
-        self.postprocessing = postprocessing
+        self.preprocessing = lambda x, f: x
+        self.postprocessing = lambda y: y
         self.pre_hooks = []
         self.post_hooks = []
+
+    def set_global_preprocessing(self, preprocessing: PreProcessingFunction):
+        """
+            Set a global preprocessing function that
+            is applied to all feature data before the algorithm execution.
+
+            Keyword arguments:
+            preprocessing -- The preprocessing function
+        """
+        self.preprocessing = preprocessing
+
+    def set_global_postprocessing(self, postprocessing: PostProcessingFunction):
+        """
+            Set a global postprocessing function that
+            is applied to all label data returned by the algorithm.
+
+            Keyword arguments:
+            postprocessing -- The postprocessing function
+        """
+        self.postprocessing = postprocessing
 
     def predict(self, features, feature_type: str, metadata: Dict) -> np.ndarray:
         """

@@ -2,7 +2,7 @@ import sqlite3
 from uuid import uuid4
 from io import BytesIO 
 import json
-from functools import partial
+from functools import partial, reduce
 import numpy as np
 from typing import Callable, Dict
 
