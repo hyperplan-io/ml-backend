@@ -4,10 +4,19 @@
 
 import setuptools
 from version import get_version
+import os
 
+here = os.path.dirname(os.path.realpath(__file__))
 
 with open('README.rst') as f:
     readme = f.read()
+
+requirementPath = here + '/requirements.txt'
+install_requires = []
+
+if os.path.isfile(requirementPath):
+    with open(requirementPath) as f:
+        install_requires = list(f.read().splitlines())
 
 setuptools.setup(
     name='mlbackend',
@@ -24,6 +33,7 @@ setuptools.setup(
         'mlbackend.hooks',
     ],
     package_dir={'mlbackend': 'mlbackend/', 'hooks': 'mlbackend/hooks/'},
-    include_package_data=True
+    include_package_data=True,
+    install_requires = install_requires
 )
 
