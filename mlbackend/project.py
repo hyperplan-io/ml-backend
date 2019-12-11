@@ -5,6 +5,8 @@
 from typing import Callable, List, Dict
 import random
 import numpy as np
+from uuid import uuid4
+from concurrent.futures import ThreadPoolExecutor
 
 PredictionFunction = Callable[[np.ndarray], np.ndarray]
 PreProcessingFunction = Callable[[np.ndarray, str], np.ndarray]
@@ -61,22 +63,28 @@ class Project():
             features -- An array of data that will be preprocessed by the preprocessing function.
             metadata -- A list of tuples (key and value) to associate to this prediction.
         """
+
+        prediction_id = str(uuid4())
         preprocessed_features = self.preprocessing(features, feature_type)
 
         if preprocessed_features is None:
             return None
 
-        for hook in self.pre_hooks:
-            hook(features, metadata)
+        with ThreadPoolExecutor() as executor:
+            running_tasks = [executor.submit(hook(features, metadata)) for hook in self.pre_hooks]
+            for running_task in running_tasks:
+                running_task.result()
 
         labels = self.postprocessing(
             self.selection_function(self.prediction_functions, features)(
                 preprocessed_features
             )
         )
-        print(labels)
-        for hook in self.post_hooks:
-            hook(features, labels, metadata)
+
+        with ThreadPoolExecutor() as executor:
+            running_tasks = [executor.submit(hook(features, labels, metadata)) for hook in self.post_hooks]
+            for running_task in running_tasks:
+                running_task.result
 
         return labels
 
