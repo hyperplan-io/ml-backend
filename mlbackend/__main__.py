@@ -8,7 +8,7 @@
 from project import Project
 from mlrestapp import MlRestApp
 
-from .hooks.sqlite_hook import sqlite_hook
+from hooks.sqlite_hook import sqlite_hook
 
 def preprocess(features, feature_type):
     """
